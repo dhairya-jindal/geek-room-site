@@ -1,0 +1,35 @@
+/* Hero: Animated mesh gradient - deep purple → indigo → black */
+.hero__gradient {
+  background: linear-gradient(
+    135deg,
+    #0f0c29 0%,
+    #302b63 35%,
+    #24243e 65%,
+    #0f0c29 100%
+  );
+  background-size: 400% 400%;
+  animation: meshGradient 15s ease infinite;
+}
+
+@keyframes meshGradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Optional: subtle radial overlay for depth */
+.hero__gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 20%,
+    rgba(129, 140, 248, 0.15) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
