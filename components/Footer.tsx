@@ -4,7 +4,6 @@ const navLinks = [
   { href: "/about", label: "About" },
   { href: "/team", label: "Team" },
   { href: "/events", label: "Events" },
-  { href: "/projects", label: "System Nodes" },
   { href: "/gallery", label: "Gallery" },
   { href: "/join", label: "Initialize" },
   { href: "/contact", label: "Contact" },
