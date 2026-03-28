@@ -17,6 +17,17 @@ export type TeamMember = {
 
 export async function getMembers(): Promise<TeamMember[]> {
   try {
+    if (!process.env.DATABASE_URL) {
+      console.warn("DATABASE_URL is missing. Falling back to local team.json");
+      const fs = require('fs');
+      const path = require('path');
+      const dataPath = path.join(process.cwd(), 'data', 'team.json');
+      if (fs.existsSync(dataPath)) {
+        return JSON.parse(fs.readFileSync(dataPath, 'utf-8')) as TeamMember[];
+      }
+      return [];
+    }
+
     const members = await prisma.teamMember.findMany({
       orderBy: { id: "asc" }
     });
