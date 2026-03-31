@@ -1,4 +1,4 @@
-import { LogoSequence } from "@/components/LogoSequence";
+import HeroLogoAnimation from "@/components/HeroLogoAnimation";
 import { SystemInterface } from "@/components/SystemInterface";
 import { TeamPreview } from "@/components/TeamPreview";
 import { EventsPreview } from "@/components/EventsPreview";
@@ -19,8 +19,8 @@ export default async function Home() {
 
   return (
     <main className="relative bg-[#050505] min-h-screen text-[#ededed]">
-      {/* 400vh Scrollytelling hero section */}
-      <LogoSequence />
+      {/* Hero logo animation */}
+      <HeroLogoAnimation />
       
       {/* Redesigned Home/About Flow */}
       <SystemInterface />
