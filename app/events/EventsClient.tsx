@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { EventDetails } from "./data";
 import { 
@@ -58,6 +58,11 @@ export default function EventsClient({ events }: { events: EventDetails[] }) {
   const [sortBy, setSortBy] = useState<"latest" | "popular" | "ending-soon">("latest");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
+  const featuredRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: featuredRef, offset: ["start end", "end start"] });
+  const featuredY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const featuredOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 0.6]);
+  
   const categories = ["all", "hackathon", "workshop", "talk", "tech-event"];
 
   // Filter & Sort Logic
@@ -85,16 +90,23 @@ export default function EventsClient({ events }: { events: EventDetails[] }) {
       <LunarRunwayBackground />
 
       {/* ============== HERO / FEATURED SECTION ============== */}
-      <div className="relative z-10 flex flex-col items-center mb-16">
-        <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+      <div className="relative z-10 flex flex-col items-center mb-16" ref={featuredRef}>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="inline-flex items-center gap-2 bg-[#4F9EFF]/5 border border-[#4F9EFF]/15 rounded-full px-4 py-1.5 mb-8 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
+        >
           <div className="w-2 h-2 rounded-full bg-[#4F9EFF] animate-pulse" />
-          <span className="text-xs font-medium text-white/80">
+          <span className="text-xs font-medium text-[#4F9EFF]/80">
             System Online
           </span>
-        </div>
+        </motion.div>
 
         {/* Featured Card */}
-        <div className="w-full max-w-5xl rounded-3xl border border-white/10 bg-[#0A0A0A]/40 backdrop-blur-2xl overflow-hidden relative shadow-[0_8px_30px_rgb(0,0,0,0.12)] group">
+        <motion.div
+          style={{ y: featuredY, opacity: featuredOpacity }}
+          className="w-full max-w-5xl rounded-3xl border border-[#4F9EFF]/10 bg-[#0A0A0A]/40 backdrop-blur-2xl overflow-hidden relative shadow-[0_8px_30px_rgb(0,0,0,0.12)] group"
           
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] min-h-[350px]">
             {/* Content Side */}
@@ -155,11 +167,11 @@ export default function EventsClient({ events }: { events: EventDetails[] }) {
                   <MonitorPlay className="w-16 h-16 text-white/5" />
                 </div>
               )}
-              <div className="absolute top-4 right-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1 text-[10px] font-medium text-white uppercase tracking-wider">
+              <div className="absolute top-4 right-4 bg-[#4F9EFF]/10 backdrop-blur-md border border-[#4F9EFF]/20 rounded-full px-3 py-1 text-[10px] font-medium text-[#4F9EFF] uppercase tracking-wider">
                 {isUpcoming ? "Featured" : "Archive"}
-              </div>
-            </div>
           </div>
+        </motion.div>
+      </div>
         </div>
       </div>
 
@@ -279,24 +291,36 @@ export default function EventsClient({ events }: { events: EventDetails[] }) {
           ) : (
             <motion.div
               key="grid-view"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.08, delayChildren: 0.1 }
+                }
+              }}
               className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[380px]"
             >
               {filteredEvents.map((event, idx) => {
-                // Determine bento sizing
-                // Make the 1st item of every 5-item group large, except if filtered count <= 2
                 const isLarge = (idx % 5 === 0) && filteredEvents.length > 2;
                 
                 return (
-                  <MinimalEventCard 
-                    key={event.slug} 
-                    event={event} 
-                    index={idx} 
-                    isLarge={isLarge}
-                  />
+                  <motion.div
+                    key={event.slug}
+                    variants={{
+                      hidden: { opacity: 0, y: 40, scale: 0.96 },
+                      visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }
+                    }}
+                    className={isLarge ? "md:col-span-2 md:row-span-1" : "col-span-1 row-span-1"}
+                  >
+                    <MinimalEventCard 
+                      event={event} 
+                      index={idx} 
+                      isLarge={isLarge}
+                    />
+                  </motion.div>
                 );
               })}
 
