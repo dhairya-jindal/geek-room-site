@@ -67,10 +67,10 @@ export function WhySection() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-3 mb-6"
         >
-          <div className="h-px w-8" style={{ backgroundColor: "#00F2FF" }} />
+          <div className="h-px w-8" style={{ backgroundColor: "#4F9EFF" }} />
           <span
             className="text-xs font-medium tracking-[0.2em] uppercase"
-            style={{ color: "#00F2FF", fontFamily: "'Inter', sans-serif" }}
+            style={{ color: "#4F9EFF", fontFamily: "'Inter', sans-serif" }}
           >
             Why Geek Room
           </span>
@@ -123,7 +123,7 @@ export function WhySection() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 }}
               className="mt-12 pl-5"
-              style={{ borderLeft: "2px solid #00F2FF" }}
+              style={{ borderLeft: "2px solid #4F9EFF" }}
             >
               <p
                 className="italic leading-snug"
@@ -170,7 +170,7 @@ export function WhySection() {
                       className="w-10 h-10 rounded-xl flex items-center justify-center"
                       style={{ backgroundColor: "rgba(0,242,255,0.08)", border: "1px solid rgba(0,242,255,0.14)" }}
                     >
-                      <pillar.icon className="w-4.5 h-4.5" style={{ color: "#00F2FF", width: 18, height: 18 }} />
+                      <pillar.icon className="w-4.5 h-4.5" style={{ color: "#4F9EFF", width: 18, height: 18 }} />
                     </div>
                     <span
                       className="font-mono text-xs"
@@ -211,7 +211,7 @@ export function WhySection() {
                 {/* Bottom accent line on hover */}
                 <div
                   className="absolute bottom-0 left-7 right-7 h-px transition-all duration-500 opacity-0 group-hover:opacity-100"
-                  style={{ background: "linear-gradient(90deg, #00F2FF, transparent)" }}
+                  style={{ background: "linear-gradient(90deg, #4F9EFF, transparent)" }}
                 />
               </motion.div>
             ))}
